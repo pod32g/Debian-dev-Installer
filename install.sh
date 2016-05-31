@@ -2,6 +2,35 @@
 #Basic developer enviroment setup for debian based distros
 #Instalation of sublime text thanks to: https://gist.github.com/simonewebdesign/8507139
 
+install_pebble_sdk() {
+
+	sudo apt-get install python-pip python2.7-dev libsdl1.2debian libfdt1 libpixman-1-0
+	sudo pip install virtualenv
+
+	if [ "$(uname -m)" = "x86_64" ]; then
+	  ARCH="64"
+	else
+	  ARCH="32"
+	fi
+
+	VERSION=$(echo $(curl https://developer.pebble.com/sdk/) | sed -rn "s#.*Current Tool Version: ([0-9]{1,2}([,.][0-9]{1,2})+)..*#\1#p")
+	URL="https://s3.amazonaws.com/assets.getpebble.com/pebble-tool/pebble-sdk-{$VERSION}-linux{$ARCH}.tar.bz2"
+	DIR="/opt/pebble_sdk"
+
+	curl -o $HOME/pbl.tar.bz2 $URL
+	if tar -xf $HOME/pbl.tar.bz2 --directory=$HOME; then
+		sudo rm -rf $DIR
+		sudo mv $HOME/pebble-sdk-{$VERSION}-linux{$ARCH} $DIR
+		#sudo ln -s $DIR/pebble-sdk-{$VERSION}-linux{$ARCH}/bin/pebble /bin/
+	fi
+	rm $HOME/pbl.tar.bz2
+	cd $DIR/pebble-sdk-{$VERSION}-linux{$ARCH}
+	virtualenv --no-site-packages .env
+	source .env/bin/activate
+	pip install -r requirements.txt
+	deactivate
+}
+
 install_sublime() {
 
 	if [ "$(uname -m)" = "x86_64" ]; then
@@ -31,8 +60,11 @@ install_sublime() {
 install_packages() {
 	if [ $1 = "Sublime Text" ]; then
 		install_sublime
-	else 
+	elif [ $1 = "pebble" ]; then
+		install_pebble_sdk
+	else
 		sudo apt-get install $1
+	
 	fi
 }
 
@@ -44,7 +76,8 @@ choose_packages() {
 	"golang" "Go compiler" OFF \
 	"default-jre" "Java Runtime Environment" OFF \
 	"default-jdk" "Java Development Kit" OFF \
-	"scala" "Scala Compiler" OFF  3>&1 1>&2 2>&3)
+	"scala" "Scala Compiler" OFF  \
+	"pebble" "Pebble Smartwatch SDK" OFF 3>&1 1>&2 2>&3)
 
 	selection=$?
 
@@ -77,8 +110,7 @@ choose_editors() {
 
 update_system() {
 	echo "Updating"
-	#sudo apt-get update
-	sudo apt-get moo
+	sudo apt-get update
 }
 
 main_menu() {
