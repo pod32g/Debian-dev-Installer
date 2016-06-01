@@ -25,7 +25,7 @@ install_pebble_sdk() {
 	if tar -xf $HOME/pbl.tar.bz2 --directory=$HOME; then
 		sudo rm -rf $DIR
 		sudo mv $HOME/pebble-sdk-{$VERSION}-linux{$ARCH} $DIR
-		#sudo ln -s $DIR/pebble-sdk-{$VERSION}-linux{$ARCH}/bin/pebble /bin/
+		sudo ln -s $DIR/pebble-sdk-{$VERSION}-linux{$ARCH}/bin/pebble /bin/
 	fi
 	rm $HOME/pbl.tar.bz2
 	cd $DIR/pebble-sdk-{$VERSION}-linux{$ARCH}
@@ -68,7 +68,6 @@ install_packages() {
 		install_pebble_sdk
 	else
 		sudo apt-get install $1 -y
-	
 	fi
 }
 
@@ -103,7 +102,7 @@ choose_editors() {
 
 	selection=$?
 
-	if [ $selection=0 ]; then 
+	if [ $selection -eq 0 ]; then 
 		for p in $OPTIONS; do
 			install_packages $p
 		done
@@ -125,7 +124,7 @@ main_menu() {
 		"4" "Exit"  3>&1 1>&2 2>&3)
 	 
 	exitstatus=$?
-	if [ $exitstatus = 0 ]; then
+	if [ $exitstatus -eq 0 ]; then
 	    case $OPTION in 
 	    	1) choose_packages
 			;;
