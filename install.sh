@@ -2,6 +2,10 @@
 #Basic developer enviroment setup for debian based distros
 #Instalation of sublime text thanks to: https://gist.github.com/simonewebdesign/8507139
 
+install_dependencies() {
+	sudo apt-get install curl whiptail -y
+}
+
 install_pebble_sdk() {
 
 	sudo apt-get install python-pip python2.7-dev libsdl1.2debian libfdt1 libpixman-1-0
@@ -63,7 +67,7 @@ install_packages() {
 	elif [ $1 = "pebble" ]; then
 		install_pebble_sdk
 	else
-		sudo apt-get install $1
+		sudo apt-get install $1 -y
 	
 	fi
 }
@@ -81,7 +85,7 @@ choose_packages() {
 
 	selection=$?
 
-	if [ $selection=0 ]; then 
+	if [ $selection -eq 0 ]; then 
 		for p in $OPTIONS; do
 			install_packages $p
 		done
@@ -109,8 +113,8 @@ choose_editors() {
 }
 
 update_system() {
-	echo "Updating"
 	sudo apt-get update
+	install_dependencies
 }
 
 main_menu() {
