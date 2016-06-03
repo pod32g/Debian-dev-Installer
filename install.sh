@@ -3,6 +3,7 @@
 #Instalation of sublime text thanks to: https://gist.github.com/simonewebdesign/8507139
 
 install_ceylon() {
+	sudo apt-get install apt-transport-https
 	wget -O - https://downloads.ceylon-lang.org/apt/ceylon-debian-repo.gpg.key | sudo apt-key add -
 	sudo add-apt-repository "deb https://downloads.ceylon-lang.org/apt/ unstable main"
 	sudo apt-get update
@@ -69,7 +70,7 @@ install_sublime() {
 }
 
 install_packages() {
-	if [ $1 = "Sublime Text" ]; then
+	if [ $1 = "sublime" ]; then
 		install_sublime
 	elif [ $1 = "pebble" ]; then
 		install_pebble_sdk
@@ -108,7 +109,7 @@ choose_editors() {
 	"Choose packages to install " 15 60 4 \
 	"Emacs" "GNU Emacs editor" OFF \
 	"vim" "Vi Improved" OFF \
-	"Sublime Text" "Sublime Text 3" OFF 3>&1 1>&2 2>&3)
+	"sublime" "Sublime Text 3" OFF 3>&1 1>&2 2>&3)
 
 	selection=$?
 
