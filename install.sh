@@ -2,6 +2,13 @@
 #Basic developer enviroment setup for debian based distros
 #Instalation of sublime text thanks to: https://gist.github.com/simonewebdesign/8507139
 
+install_ceylon() {
+	wget -O - https://downloads.ceylon-lang.org/apt/ceylon-debian-repo.gpg.key | sudo apt-key add -
+	sudo add-apt-repository "deb https://downloads.ceylon-lang.org/apt/ unstable main"
+	sudo apt-get update
+	sudo apt-get install ceylon-1.2.2
+}
+
 install_dependencies() {
 	sudo apt-get install curl whiptail -y
 }
@@ -66,6 +73,8 @@ install_packages() {
 		install_sublime
 	elif [ $1 = "pebble" ]; then
 		install_pebble_sdk
+	elif [ $1 = "ceylon" ]; then
+		install_ceylon
 	else
 		sudo apt-get install $1 -y
 	fi
@@ -80,6 +89,7 @@ choose_packages() {
 	"default-jre" "Java Runtime Environment" OFF \
 	"default-jdk" "Java Development Kit" OFF \
 	"scala" "Scala Compiler" OFF  \
+	"ceylon" "Ceylon language compiler" OFF \
 	"pebble" "Pebble Smartwatch SDK" OFF 3>&1 1>&2 2>&3)
 
 	selection=$?
